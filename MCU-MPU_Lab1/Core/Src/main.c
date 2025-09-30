@@ -42,19 +42,71 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+static const uint32_t time_red_ms = 5000U;
+static const uint32_t time_yellow_ms = 2000U;
+static const uint32_t time_green_ms = 3000U;
 
+typedef enum { STATE_GREEN, STATE_YELLOW, STATE_RED} traffic_state_t;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
+// LED active-low: RESET = ON, SET = OFF
+static inline void led_on(GPIO_TypeDef* port, uint16_t pin){
+	HAL_GPIO_WritePin(port, pin, GPIO_PIN_RESET);
+}
+static inline void led_off(GPIO_TypeDef* port, uint16_t pin){
+	HAL_GPIO_WritePin(port, pin, GPIO_PIN_SET);
+}
 
+static void traffic_light_init(void);
+static void traffic_light_loop_once(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+// Init State: GREEN
+static void traffic_light_init(void) {
+  led_off(LED_RED_GPIO_Port,    LED_RED_Pin);
+  led_off(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
+  led_on (LED_GREEN_GPIO_Port,  LED_GREEN_Pin);
+}
 
+// One loop of traffic-light state machine: set LEDs, wait, next state (GREEN -> YELLOW -> RED -> GREEN)
+static void traffic_light_loop_once(void) {
+  static traffic_state_t state = STATE_GREEN;
+  uint32_t delay_ms = 0;
+
+  switch (state) {
+    case STATE_GREEN:  // GREEN 3s -> YELLOW
+      led_off(LED_RED_GPIO_Port,    LED_RED_Pin);
+      led_off(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
+      led_on (LED_GREEN_GPIO_Port,  LED_GREEN_Pin);
+      delay_ms = time_green_ms;
+      state = STATE_YELLOW;
+      break;
+
+    case STATE_YELLOW: // YELLOW 2s -> RED
+      led_off(LED_RED_GPIO_Port,    LED_RED_Pin);
+      led_on (LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
+      led_off(LED_GREEN_GPIO_Port,  LED_GREEN_Pin);
+      delay_ms = time_yellow_ms;
+      state = STATE_RED;
+      break;
+
+    case STATE_RED:    // RED 5s -> GREEN
+      led_on (LED_RED_GPIO_Port,    LED_RED_Pin);
+      led_off(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
+      led_off(LED_GREEN_GPIO_Port,  LED_GREEN_Pin);
+      delay_ms = time_red_ms;
+      state = STATE_GREEN;
+      break;
+  }
+
+  HAL_Delay(delay_ms);
+}
 /* USER CODE END 0 */
 
 /**
@@ -86,17 +138,14 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, RESET);
-  HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, SET);
+  traffic_light_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_Delay(2000);
-	  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-	  HAL_GPIO_TogglePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin);
+	traffic_light_loop_once();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -152,10 +201,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin;
+  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
