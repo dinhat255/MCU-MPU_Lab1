@@ -54,6 +54,14 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void setAllClockOn(void)
+{
+    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
+    {
+        uint16_t pin = (1 << i);
+        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
+    }
+}
 static void clearAllClock(void)
 {
     for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
@@ -65,8 +73,14 @@ static void clearAllClock(void)
 void setNumberOnClock(int num)
 {
     if (num < 0 || num > 11) return;
-    uint16_t pin = (uint16_t)(1 << (num + 4));
-    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET);
+    uint16_t pin = (uint16_t)(1 << (num + 4)); // PA4 = LED1, PA15 = LED12
+    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
+}
+void clearNumberOnClock(int num)
+{
+    if (num < 0 || num > 11) return;
+    uint16_t pin = (uint16_t)(1u << (num + 4)); // PA4 = LED1, PA15 = LED12
+    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET);     // Active-low: RESET = turn ON, SET = turn OFF
 }
 /* USER CODE END 0 */
 
@@ -106,10 +120,11 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  clearAllClock();
-	  setNumberOnClock(idx);
+	  setAllClockOn();
+	  clearNumberOnClock(idx);
 	  idx = (idx + 1) % 12;
-	  HAL_Delay(1000);
+      HAL_Delay(1000);
+      if (idx == 0) setAllClockOn();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
