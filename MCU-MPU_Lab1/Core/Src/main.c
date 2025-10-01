@@ -54,14 +54,14 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void setAllClockOn(void)
-{
-    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
-    {
-        uint16_t pin = (1 << i);
-        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
-    }
-}
+//static void setAllClockOn(void)
+//{
+//    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
+//    {
+//        uint16_t pin = (1 << i);
+//        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
+//    }
+//}
 static void clearAllClock(void)
 {
     for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
@@ -125,6 +125,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  clearAllClock();
   uint8_t hour=1, minute=50, second=0;
   /* USER CODE END 2 */
 
