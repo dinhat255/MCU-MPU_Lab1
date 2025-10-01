@@ -62,6 +62,12 @@ static void clearAllClock(void)
         HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET); // Active-low: RESET = turn ON, SET = turn OFF
     }
 }
+void setNumberOnClock(int num)
+{
+    if (num < 0 || num > 11) return;
+    uint16_t pin = (uint16_t)(1 << (num + 4));
+    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET);
+}
 /* USER CODE END 0 */
 
 /**
@@ -93,33 +99,16 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t state = 0;
+  uint8_t idx = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if (state == 0){
-		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED8_GPIO_Port, LED8_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED9_GPIO_Port, LED9_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED10_GPIO_Port, LED10_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED11_GPIO_Port, LED11_Pin, GPIO_PIN_RESET);
-		HAL_GPIO_WritePin(LED12_GPIO_Port, LED12_Pin, GPIO_PIN_RESET);
-		state = 1;
-	  }
-	  else
-	  {
-		clearAllClock();
-		state = 0;
-	  }
+	  clearAllClock();
+	  setNumberOnClock(idx);
+	  idx = (idx + 1) % 12;
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
