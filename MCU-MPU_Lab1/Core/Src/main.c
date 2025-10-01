@@ -79,8 +79,20 @@ void setNumberOnClock(int num)
 void clearNumberOnClock(int num)
 {
     if (num < 0 || num > 11) return;
-    uint16_t pin = (uint16_t)(1u << (num + 4)); // PA4 = LED1, PA15 = LED12
+    uint16_t pin = (uint16_t)(1 << (num + 4)); // PA4 = LED1, PA15 = LED12
     HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET);     // Active-low: RESET = turn ON, SET = turn OFF
+}
+void displayClock(int hour, int minute, int second)
+{
+    clearAllClock();
+
+    int h = hour % 12;
+    int m = minute / 5;
+    int s = second / 5;
+
+    setNumberOnClock(h);
+    setNumberOnClock(m);
+    setNumberOnClock(s);
 }
 /* USER CODE END 0 */
 
@@ -113,18 +125,27 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-  uint8_t idx = 0;
+  uint8_t hour=1, minute=50, second=0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  setAllClockOn();
-	  clearNumberOnClock(idx);
-	  idx = (idx + 1) % 12;
-      HAL_Delay(1000);
-      if (idx == 0) setAllClockOn();
+	  displayClock(hour, minute, second);
+	  HAL_Delay(20);
+	  second++;
+	  if(second>=60) {
+		  minute++;
+		  second=0;
+	  }
+	  if(minute>=60) {
+		  hour++;
+		  minute=0;
+	  }
+	  if(hour>=24){
+		  hour=0;
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
