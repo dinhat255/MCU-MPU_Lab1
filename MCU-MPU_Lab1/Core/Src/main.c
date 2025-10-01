@@ -47,13 +47,48 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void setTrafficLight(GPIO_TypeDef* RED_Port, uint16_t RED_Pin,
+                     GPIO_TypeDef* YELLOW_Port, uint16_t YELLOW_Pin,
+                     GPIO_TypeDef* GREEN_Port, uint16_t GREEN_Pin,
+                     GPIO_PinState red, GPIO_PinState yellow, GPIO_PinState green)
+{
+    HAL_GPIO_WritePin(RED_Port, RED_Pin, red);
+    HAL_GPIO_WritePin(YELLOW_Port, YELLOW_Pin, yellow);
+    HAL_GPIO_WritePin(GREEN_Port, GREEN_Pin, green);
+}
+void display7SEG(int num) {
+    uint8_t seg_code[10] = {
+    	    0xC0, // 0
+    	    0xF9, // 1
+    	    0xA4, // 2
+    	    0xB0, // 3
+    	    0x99, // 4
+    	    0x92, // 5
+    	    0x82, // 6
+    	    0xF8, // 7
+    	    0x80, // 8
+    	    0x90  // 9
+    };
 
+    if (num < 0 || num > 9) return;
+
+    uint8_t pattern = seg_code[num];
+
+    HAL_GPIO_WritePin(SEG_A_GPIO_Port, SEG_A_Pin, (pattern & (1<<0)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_B_GPIO_Port, SEG_B_Pin, (pattern & (1<<1)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_C_GPIO_Port, SEG_C_Pin, (pattern & (1<<2)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_D_GPIO_Port, SEG_D_Pin, (pattern & (1<<3)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_E_GPIO_Port, SEG_E_Pin, (pattern & (1<<4)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_F_GPIO_Port, SEG_F_Pin, (pattern & (1<<5)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(SEG_G_GPIO_Port, SEG_G_Pin, (pattern & (1<<6)) ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
 /* USER CODE END 0 */
 
 /**
@@ -83,6 +118,7 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
@@ -91,6 +127,97 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  // =========================
+	  // Phase 1: North-South GREEN, East-West RED
+	  // =========================
+	  setTrafficLight(LED_RED_N_GPIO_Port, LED_RED_N_Pin,
+	                  LED_YELLOW_N_GPIO_Port, LED_YELLOW_N_Pin,
+	                  LED_GREEN_N_GPIO_Port, LED_GREEN_N_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_RESET);
+
+	  setTrafficLight(LED_RED_S_GPIO_Port, LED_RED_S_Pin,
+	                  LED_YELLOW_S_GPIO_Port, LED_YELLOW_S_Pin,
+	                  LED_GREEN_S_GPIO_Port, LED_GREEN_S_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_RESET);
+
+	  setTrafficLight(LED_RED_E_GPIO_Port, LED_RED_E_Pin,
+	                  LED_YELLOW_E_GPIO_Port, LED_YELLOW_E_Pin,
+	                  LED_GREEN_E_GPIO_Port, LED_GREEN_E_Pin,
+	                  GPIO_PIN_RESET, GPIO_PIN_SET, GPIO_PIN_SET);
+
+	  setTrafficLight(LED_RED_W_GPIO_Port, LED_RED_W_Pin,
+	                  LED_YELLOW_W_GPIO_Port, LED_YELLOW_W_Pin,
+	                  LED_GREEN_W_GPIO_Port, LED_GREEN_W_Pin,
+	                  GPIO_PIN_RESET, GPIO_PIN_SET, GPIO_PIN_SET);
+
+	  for (int t = 3; t > 0; t--) {   // xanh 3s
+	  		  display7SEG(t);
+	  		  HAL_Delay(1000);
+	  	  }
+
+	  // =========================
+	  // Phase 2: North-South YELLOW
+	  // =========================
+	  setTrafficLight(LED_RED_N_GPIO_Port, LED_RED_N_Pin,
+	                  LED_YELLOW_N_GPIO_Port, LED_YELLOW_N_Pin,
+	                  LED_GREEN_N_GPIO_Port, LED_GREEN_N_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_RESET, GPIO_PIN_SET);
+
+	  setTrafficLight(LED_RED_S_GPIO_Port, LED_RED_S_Pin,
+	                  LED_YELLOW_S_GPIO_Port, LED_YELLOW_S_Pin,
+	                  LED_GREEN_S_GPIO_Port, LED_GREEN_S_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_RESET, GPIO_PIN_SET);
+
+	  for (int t = 2; t > 0; t--) {   // vàng 2s
+	  		  display7SEG(t);
+	  		  HAL_Delay(1000);
+	  	  }
+
+	  // =========================
+	  // Phase 3: East-West GREEN, North-South RED
+	  // =========================
+	  setTrafficLight(LED_RED_N_GPIO_Port, LED_RED_N_Pin,
+	                  LED_YELLOW_N_GPIO_Port, LED_YELLOW_N_Pin,
+	                  LED_GREEN_N_GPIO_Port, LED_GREEN_N_Pin,
+	                  GPIO_PIN_RESET, GPIO_PIN_SET, GPIO_PIN_SET);
+
+	  setTrafficLight(LED_RED_S_GPIO_Port, LED_RED_S_Pin,
+	                  LED_YELLOW_S_GPIO_Port, LED_YELLOW_S_Pin,
+	                  LED_GREEN_S_GPIO_Port, LED_GREEN_S_Pin,
+	                  GPIO_PIN_RESET, GPIO_PIN_SET, GPIO_PIN_SET);
+
+	  setTrafficLight(LED_RED_E_GPIO_Port, LED_RED_E_Pin,
+	                  LED_YELLOW_E_GPIO_Port, LED_YELLOW_E_Pin,
+	                  LED_GREEN_E_GPIO_Port, LED_GREEN_E_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_RESET);
+
+	  setTrafficLight(LED_RED_W_GPIO_Port, LED_RED_W_Pin,
+	                  LED_YELLOW_W_GPIO_Port, LED_YELLOW_W_Pin,
+	                  LED_GREEN_W_GPIO_Port, LED_GREEN_W_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_SET, GPIO_PIN_RESET);
+
+	  for (int t = 3; t > 0; t--) {   // xanh 3s
+	  		  display7SEG(t);
+	  		  HAL_Delay(1000);
+	  	  }
+
+	  // =========================
+	  // Phase 4: East-West YELLOW
+	  // =========================
+	  setTrafficLight(LED_RED_E_GPIO_Port, LED_RED_E_Pin,
+	                  LED_YELLOW_E_GPIO_Port, LED_YELLOW_E_Pin,
+	                  LED_GREEN_E_GPIO_Port, LED_GREEN_E_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_RESET, GPIO_PIN_SET);
+
+	  setTrafficLight(LED_RED_W_GPIO_Port, LED_RED_W_Pin,
+	                  LED_YELLOW_W_GPIO_Port, LED_YELLOW_W_Pin,
+	                  LED_GREEN_W_GPIO_Port, LED_GREEN_W_Pin,
+	                  GPIO_PIN_SET, GPIO_PIN_RESET, GPIO_PIN_SET);
+
+	  for (int t = 2; t > 0; t--) {   // vàng 2s
+	  		  display7SEG(t);
+	  		  HAL_Delay(1000);
+	  	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -131,6 +258,50 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, LED_RED_N_Pin|LED_YELLOW_N_Pin|LED_GREEN_N_Pin|LED_RED_S_Pin
+                          |LED_YELLOW_S_Pin|LED_GREEN_S_Pin|LED_RED_E_Pin|LED_YELLOW_E_Pin
+                          |LED_GREEN_E_Pin|LED_RED_W_Pin|LED_YELLOW_W_Pin|LED_GREEN_W_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, SEG_A_Pin|SEG_B_Pin|SEG_C_Pin|SEG_D_Pin
+                          |SEG_E_Pin|SEG_F_Pin|SEG_G_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : LED_RED_N_Pin LED_YELLOW_N_Pin LED_GREEN_N_Pin LED_RED_S_Pin
+                           LED_YELLOW_S_Pin LED_GREEN_S_Pin LED_RED_E_Pin LED_YELLOW_E_Pin
+                           LED_GREEN_E_Pin LED_RED_W_Pin LED_YELLOW_W_Pin LED_GREEN_W_Pin */
+  GPIO_InitStruct.Pin = LED_RED_N_Pin|LED_YELLOW_N_Pin|LED_GREEN_N_Pin|LED_RED_S_Pin
+                          |LED_YELLOW_S_Pin|LED_GREEN_S_Pin|LED_RED_E_Pin|LED_YELLOW_E_Pin
+                          |LED_GREEN_E_Pin|LED_RED_W_Pin|LED_YELLOW_W_Pin|LED_GREEN_W_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : SEG_A_Pin SEG_B_Pin SEG_C_Pin SEG_D_Pin
+                           SEG_E_Pin SEG_F_Pin SEG_G_Pin */
+  GPIO_InitStruct.Pin = SEG_A_Pin|SEG_B_Pin|SEG_C_Pin|SEG_D_Pin
+                          |SEG_E_Pin|SEG_F_Pin|SEG_G_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
