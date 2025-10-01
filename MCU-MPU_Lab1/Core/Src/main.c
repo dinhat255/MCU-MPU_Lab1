@@ -49,6 +49,18 @@ typedef enum {
 /* USER CODE BEGIN PV */
 static const uint32_t time_green_s  = 3;
 static const uint32_t time_yellow_s = 2;
+static const uint8_t seg_code[10] = {
+	    0xC0, // 0
+	    0xF9, // 1
+	    0xA4, // 2
+	    0xB0, // 3
+	    0x99, // 4
+	    0x92, // 5
+	    0x82, // 6
+	    0xF8, // 7
+	    0x80, // 8
+	    0x90  // 9
+};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -78,19 +90,6 @@ static void setTrafficLight(GPIO_TypeDef* RED_Port, uint16_t RED_Pin,
 }
 // Show a number 0-9 on 7-segment
 static void display7SEG(int num) {
-	static const uint8_t seg_code[10] = {
-    	    0xC0, // 0
-    	    0xF9, // 1
-    	    0xA4, // 2
-    	    0xB0, // 3
-    	    0x99, // 4
-    	    0x92, // 5
-    	    0x82, // 6
-    	    0xF8, // 7
-    	    0x80, // 8
-    	    0x90  // 9
-    };
-
     if (num < 0 || num > 9) return;
 
     uint8_t pattern = seg_code[num];

@@ -37,13 +37,13 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING, OCTETS
  16 .debug_macro  00015620  00000000  00000000  000247f8  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000045b8  00000000  00000000  00039e18  2**0
+ 17 .debug_line   000045b6  00000000  00000000  00039e18  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00079cc3  00000000  00000000  0003e3d0  2**0
+ 18 .debug_str    00079cc3  00000000  00000000  0003e3ce  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  000b8093  2**0
+ 19 .comment      00000053  00000000  00000000  000b8091  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000dbc  00000000  00000000  000b80e8  2**2
+ 20 .debug_frame  00000dbc  00000000  00000000  000b80e4  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -125,11 +125,6 @@ static void display7SEG(int num) {
  8000196:	b084      	sub	sp, #16
  8000198:	af00      	add	r7, sp, #0
  800019a:	6078      	str	r0, [r7, #4]
-    	    0xF8, // 7
-    	    0x80, // 8
-    	    0x90  // 9
-    };
-
     if (num < 0 || num > 9) return;
  800019c:	687b      	ldr	r3, [r7, #4]
  800019e:	2b00      	cmp	r3, #0
