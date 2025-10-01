@@ -54,13 +54,13 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-static void led_blink(int led_index, uint32_t delay_ms)
+static void clearAllClock(void)
 {
-    uint16_t pin = (1 << (led_index + 3)); // PA4 = LED1, PA15 = LED12
-
-    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
-    HAL_Delay(delay_ms);
-    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET);
+    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
+    {
+        uint16_t pin = (1 << i);
+        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET); // Active-low: RESET = turn ON, SET = turn OFF
+    }
 }
 /* USER CODE END 0 */
 
@@ -93,18 +93,34 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
-
+  uint8_t state = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	for(int i = 1; i <= 12; i++)
-	{
-		led_blink(i, 1000);
-	}
+	  if (state == 0){
+		HAL_GPIO_WritePin(LED1_GPIO_Port, LED1_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED2_GPIO_Port, LED2_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED3_GPIO_Port, LED3_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED4_GPIO_Port, LED4_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED5_GPIO_Port, LED5_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED6_GPIO_Port, LED6_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED7_GPIO_Port, LED7_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED8_GPIO_Port, LED8_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED9_GPIO_Port, LED9_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED10_GPIO_Port, LED10_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED11_GPIO_Port, LED11_Pin, GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED12_GPIO_Port, LED12_Pin, GPIO_PIN_RESET);
+		state = 1;
+	  }
+	  else
+	  {
+		clearAllClock();
+		state = 0;
+	  }
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
