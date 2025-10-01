@@ -79,7 +79,7 @@ void setNumberOnClock(int num)
 void clearNumberOnClock(int num)
 {
     if (num < 0 || num > 11) return;
-    uint16_t pin = (uint16_t)(1u << (num + 4)); // PA4 = LED1, PA15 = LED12
+    uint16_t pin = (uint16_t)(1 << (num + 4)); // PA4 = LED1, PA15 = LED12
     HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET);     // Active-low: RESET = turn ON, SET = turn OFF
 }
 /* USER CODE END 0 */

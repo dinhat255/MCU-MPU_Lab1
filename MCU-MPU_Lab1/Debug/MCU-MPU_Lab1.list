@@ -136,7 +136,7 @@ void clearNumberOnClock(int num)
  8000196:	687b      	ldr	r3, [r7, #4]
  8000198:	2b0b      	cmp	r3, #11
  800019a:	dc0c      	bgt.n	80001b6 <clearNumberOnClock+0x2e>
-    uint16_t pin = (uint16_t)(1u << (num + 4)); // PA4 = LED1, PA15 = LED12
+    uint16_t pin = (uint16_t)(1 << (num + 4)); // PA4 = LED1, PA15 = LED12
  800019c:	687b      	ldr	r3, [r7, #4]
  800019e:	3304      	adds	r3, #4
  80001a0:	2201      	movs	r2, #1
