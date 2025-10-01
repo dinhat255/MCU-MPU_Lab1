@@ -120,7 +120,7 @@ int main(void)
 		clearAllClock();
 		state = 0;
 	  }
-	  HAL_Delay(1000);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

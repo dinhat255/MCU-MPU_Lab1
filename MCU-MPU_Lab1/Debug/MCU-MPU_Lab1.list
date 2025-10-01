@@ -235,8 +235,8 @@ int main(void)
  8000236:	2300      	movs	r3, #0
  8000238:	71fb      	strb	r3, [r7, #7]
 	  }
-	  HAL_Delay(1000);
- 800023a:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+	  HAL_Delay(500);
+ 800023a:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  800023e:	f000 f961 	bl	8000504 <HAL_Delay>
 	  if (state == 0){
  8000242:	e7ac      	b.n	800019e <main+0x16>
