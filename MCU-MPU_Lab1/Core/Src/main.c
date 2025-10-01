@@ -62,14 +62,14 @@ static void setAllClockOn(void)
         HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET); // Active-low: RESET = turn ON, SET = turn OFF
     }
 }
-static void clearAllClock(void)
-{
-    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
-    {
-        uint16_t pin = (1 << i);
-        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET); // Active-low: RESET = turn ON, SET = turn OFF
-    }
-}
+//static void clearAllClock(void)
+//{
+//    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
+//    {
+//        uint16_t pin = (1 << i);
+//        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET); // Active-low: RESET = turn ON, SET = turn OFF
+//    }
+//}
 void setNumberOnClock(int num)
 {
     if (num < 0 || num > 11) return;
@@ -123,7 +123,7 @@ int main(void)
 	  setAllClockOn();
 	  clearNumberOnClock(idx);
 	  idx = (idx + 1) % 12;
-      HAL_Delay(1000);
+      HAL_Delay(500);
       if (idx == 0) setAllClockOn();
     /* USER CODE END WHILE */
 

@@ -27,23 +27,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   ALLOC
  11 .ARM.attributes 00000029  00000000  00000000  0002000c  2**0
                   CONTENTS, READONLY
- 12 .debug_info   000030b7  00000000  00000000  00020035  2**0
+ 12 .debug_info   00003070  00000000  00000000  00020035  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00000e87  00000000  00000000  000230ec  2**0
+ 13 .debug_abbrev 00000e87  00000000  00000000  000230a5  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 000003f0  00000000  00000000  00023f78  2**3
+ 14 .debug_aranges 000003e8  00000000  00000000  00023f30  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_ranges 00000368  00000000  00000000  00024368  2**3
+ 15 .debug_ranges 00000360  00000000  00000000  00024318  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_macro  000155cc  00000000  00000000  000246d0  2**0
+ 16 .debug_macro  000155cc  00000000  00000000  00024678  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_line   000045ac  00000000  00000000  00039c9c  2**0
+ 17 .debug_line   0000456e  00000000  00000000  00039c44  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_str    00079a23  00000000  00000000  0003e248  2**0
+ 18 .debug_str    00079a15  00000000  00000000  0003e1b2  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .comment      00000053  00000000  00000000  000b7c6b  2**0
+ 19 .comment      00000053  00000000  00000000  000b7bc7  2**0
                   CONTENTS, READONLY
- 20 .debug_frame  00000dc0  00000000  00000000  000b7cc0  2**2
+ 20 .debug_frame  00000d9c  00000000  00000000  000b7c1c  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -219,8 +219,8 @@ int main(void)
  80001fe:	1ad1      	subs	r1, r2, r3
  8000200:	460b      	mov	r3, r1
  8000202:	71fb      	strb	r3, [r7, #7]
-      HAL_Delay(1000);
- 8000204:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+      HAL_Delay(500);
+ 8000204:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  8000208:	f000 f966 	bl	80004d8 <HAL_Delay>
       if (idx == 0) setAllClockOn();
  800020c:	79fb      	ldrb	r3, [r7, #7]
