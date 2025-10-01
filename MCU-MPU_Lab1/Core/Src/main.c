@@ -109,7 +109,7 @@ int main(void)
 	  clearAllClock();
 	  setNumberOnClock(idx);
 	  idx = (idx + 1) % 12;
-	  HAL_Delay(1000);
+	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

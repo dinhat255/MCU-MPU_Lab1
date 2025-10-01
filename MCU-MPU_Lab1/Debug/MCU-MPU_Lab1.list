@@ -215,8 +215,8 @@ int main(void)
  80001fe:	1ad1      	subs	r1, r2, r3
  8000200:	460b      	mov	r3, r1
  8000202:	71fb      	strb	r3, [r7, #7]
-	  HAL_Delay(1000);
- 8000204:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
+	  HAL_Delay(500);
+ 8000204:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  8000208:	f000 f962 	bl	80004d0 <HAL_Delay>
 	  clearAllClock();
  800020c:	e7e5      	b.n	80001da <main+0x16>
