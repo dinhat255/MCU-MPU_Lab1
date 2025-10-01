@@ -103,7 +103,7 @@ int main(void)
   {
 	for(int i = 1; i <= 12; i++)
 	{
-		led_blink(i, 1000);
+		led_blink(i, 500);
 	}
     /* USER CODE END WHILE */
 
