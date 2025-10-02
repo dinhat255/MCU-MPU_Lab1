@@ -1,8 +1,7 @@
-main.c:65:13:clearAllClock	16	static
-main.c:73:6:setNumberOnClock	24	static
-main.c:79:6:clearNumberOnClock	24	static
-main.c:85:6:displayClock	40	static
-main.c:103:5:main	16	static
-main.c:161:6:SystemClock_Config	72	static
-main.c:197:13:MX_GPIO_Init	32	static
-main.c:230:6:Error_Handler	4	static,ignoring_inline_asm
+main.c:66:13:clearAllClock	16	static
+main.c:72:13:setNumberOnClock	16	static
+main.c:77:6:displayClock	40	static
+main.c:95:5:main	16	static
+main.c:153:6:SystemClock_Config	72	static
+main.c:189:13:MX_GPIO_Init	32	static
+main.c:222:6:Error_Handler	4	static,ignoring_inline_asm
