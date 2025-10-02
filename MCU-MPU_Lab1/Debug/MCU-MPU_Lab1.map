@@ -1897,7 +1897,6 @@ LOAD d:/stm32cubeide_1.7.0/stm32cubeide/plugins/com.st.stm32cube.ide.mcu.externa
                 0x000000000800014c       0x44 ./Core/Src/main.o
  .text.setNumberOnClock
                 0x0000000008000190       0x40 ./Core/Src/main.o
-                0x0000000008000190                setNumberOnClock
  .text.main     0x00000000080001d0       0x3c ./Core/Src/main.o
                 0x00000000080001d0                main
  .text.SystemClock_Config

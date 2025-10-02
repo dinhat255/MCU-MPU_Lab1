@@ -119,7 +119,7 @@ static void clearAllClock(void)
  800018c:	08001254 	.word	0x08001254
 
 08000190 <setNumberOnClock>:
-void setNumberOnClock(int num)
+static void setNumberOnClock(int num)
 {
  8000190:	b580      	push	{r7, lr}
  8000192:	b082      	sub	sp, #8
