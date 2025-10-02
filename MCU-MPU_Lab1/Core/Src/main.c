@@ -49,24 +49,30 @@
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
-
+static GPIO_TypeDef * const LED_PORT[12] = {
+    LED0_GPIO_Port, LED1_GPIO_Port, LED2_GPIO_Port, LED3_GPIO_Port,
+    LED4_GPIO_Port, LED5_GPIO_Port, LED6_GPIO_Port, LED7_GPIO_Port,
+    LED8_GPIO_Port, LED9_GPIO_Port, LED10_GPIO_Port, LED11_GPIO_Port
+};
+static const uint16_t LED_PIN_[12] = {
+    LED0_Pin, LED1_Pin, LED2_Pin, LED3_Pin,
+    LED4_Pin, LED5_Pin, LED6_Pin, LED7_Pin,
+    LED8_Pin, LED9_Pin, LED10_Pin, LED11_Pin
+};
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 static void clearAllClock(void)
 {
-    for (int i = 4; i <= 15; i++)  // PA4 = LED1, PA15 = LED12
-    {
-        uint16_t pin = (1 << i);
-        HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_SET); // Active-low: RESET = turn ON, SET = turn OFF
+    for (uint8_t i = 0; i < 12; i++) {
+        HAL_GPIO_WritePin(LED_PORT[i], LED_PIN_[i], GPIO_PIN_SET); // OFF
     }
 }
 void setNumberOnClock(int num)
 {
     if (num < 0 || num > 11) return;
-    uint16_t pin = (uint16_t)(1 << (num + 4));
-    HAL_GPIO_WritePin(GPIOA, pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(LED_PORT[num], LED_PIN_[num], GPIO_PIN_RESET);
 }
 /* USER CODE END 0 */
 
@@ -108,7 +114,8 @@ int main(void)
   {
 	  clearAllClock();
 	  setNumberOnClock(idx);
-	  idx = (idx + 1) % 12;
+	  idx++;
+	  if (idx >= 12) idx = 0;
 	  HAL_Delay(500);
     /* USER CODE END WHILE */
 
@@ -167,7 +174,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED0_Pin|LED1_Pin|LED2_Pin|LED3_Pin
                           |LED4_Pin|LED5_Pin|LED6_Pin|LED7_Pin
-                          |LED8_Pin|LED9_Pin|LED10_Pin|LED11_Pin, GPIO_PIN_RESET);
+                          |LED8_Pin|LED9_Pin|LED10_Pin|LED11_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pins : LED0_Pin LED1_Pin LED2_Pin LED3_Pin
                            LED4_Pin LED5_Pin LED6_Pin LED7_Pin
