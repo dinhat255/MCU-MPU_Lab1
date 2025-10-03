@@ -1,8 +1,8 @@
 main.c:82:13:setTrafficLight	24	static
 main.c:92:13:display7SEG	24	static
 main.c:106:13:traffic_light_init	32	static
-main.c:129:13:traffic_light_loop_once	32	static
-main.c:237:5:main	8	static
-main.c:281:6:SystemClock_Config	72	static
-main.c:317:13:MX_GPIO_Init	32	static
-main.c:364:6:Error_Handler	4	static,ignoring_inline_asm
+main.c:129:13:traffic_light_loop_once	40	static
+main.c:258:5:main	8	static
+main.c:302:6:SystemClock_Config	72	static
+main.c:338:13:MX_GPIO_Init	32	static
+main.c:385:6:Error_Handler	4	static,ignoring_inline_asm

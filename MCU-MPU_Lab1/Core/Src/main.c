@@ -131,6 +131,30 @@ static void traffic_light_loop_once(void)
 	static traffic_state_t state = STATE_NS_GREEN;
 	static int countdown = time_green_s;
 
+	int disp = 0;
+	  switch (state)
+	  {
+	    case STATE_NS_GREEN:
+	      disp = countdown;
+	      break;
+	    case STATE_NS_YELLOW:
+	      disp = countdown;
+	      break;
+	    case STATE_EW_GREEN:
+	      disp = countdown + time_yellow_s;
+	      break;
+	    case STATE_EW_YELLOW:
+	      disp = countdown;
+	      break;
+	  }
+
+	  if (disp < 0) disp = 0;
+	  if (disp > 9) disp = 9;
+	  display7SEG(disp);
+
+	  HAL_Delay(1000);
+	  countdown--;
+
 	if (countdown <= 0)
 	{
 		switch (state)
@@ -224,9 +248,6 @@ static void traffic_light_loop_once(void)
 			break;
 		}
 	}
-	display7SEG(countdown);
-	HAL_Delay(1000);
-	countdown--;
 }
 /* USER CODE END 0 */
 
